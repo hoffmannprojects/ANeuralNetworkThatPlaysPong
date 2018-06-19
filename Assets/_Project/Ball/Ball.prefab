@@ -283,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blip: {fileID: 82050364056971022}
   _blop: {fileID: 82054730992289396}
-  _speed: 100
+  _speed: 500
 --- !u!212 &212425169310131282
 SpriteRenderer:
   m_ObjectHideFlags: 1
