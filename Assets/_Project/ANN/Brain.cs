@@ -20,7 +20,7 @@ public class Brain : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        _ann = new ANN(6, 1, 1, 4, 0.005);
+        _ann = new ANN(6, 1, 1, 4, 0.1);
         _ballRigidbody2D = _ball.GetComponent<Rigidbody2D>();
     }
 
@@ -65,27 +65,38 @@ public class Brain : MonoBehaviour
         int layerMask = 1 << 9;
         RaycastHit2D hit = Physics2D.Raycast(_ball.transform.position, _ballRigidbody2D.velocity, 1000, layerMask);
 
-        var output = new List<double>();
-
         if (hit.collider)
         {
-            float deltaY = hit.point.y - _paddle.transform.position.y;
+            // Calculate reflection off the top/bottom walls.
+            if (hit.collider.gameObject.tag == "tops")
+            {
+                Vector2 reflection = Vector2.Reflect(_ballRigidbody2D.velocity, hit.normal);
+                hit = Physics2D.Raycast(hit.point, reflection, 1000, layerMask);
+            }
 
-            output = Run(
-                _ball.transform.position.x,
-                _ball.transform.position.y,
-                _ballRigidbody2D.velocity.x,
-                _ballRigidbody2D.velocity.y,
-                _paddle.transform.position.x,
-                _paddle.transform.position.y,
-                deltaY,
-                true);
+            // Check again in case of new raycast has happened.
+            if (hit.collider)
+            {
+                var output = new List<double>();
+                float deltaY = hit.point.y - _paddle.transform.position.y;
 
-            _yVelocity = (float)output[0];
+                output = Run(
+                    _ball.transform.position.x,
+                    _ball.transform.position.y,
+                    _ballRigidbody2D.velocity.x,
+                    _ballRigidbody2D.velocity.y,
+                    _paddle.transform.position.x,
+                    _paddle.transform.position.y,
+                    deltaY,
+                    true);
+
+                _yVelocity = (float)output[0];
+            }
         }
         else
         {
             _yVelocity = 0;
         }
+
     }
 }
