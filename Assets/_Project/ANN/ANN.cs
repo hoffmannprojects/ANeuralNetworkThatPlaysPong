@@ -2,37 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ANN{
+public class ANN
+{
+    //TODO: Change to properties or private fields.
+	private int _numInputs;
+	private int _numOutputs;
+	private int _numHidden;
+	private int _numNPerHidden;
+	private double _alpha;
 
-	public int numInputs;
-	public int numOutputs;
-	public int numHidden;
-	public int numNPerHidden;
-	public double alpha;
 	List<Layer> layers = new List<Layer>();
 
 	public ANN(int nI, int nO, int nH, int nPH, double a)
 	{
-		numInputs = nI;
-		numOutputs = nO;
-		numHidden = nH;
-		numNPerHidden = nPH;
-		alpha = a;
+		_numInputs = nI;
+		_numOutputs = nO;
+		_numHidden = nH;
+		_numNPerHidden = nPH;
+		_alpha = a;
 
-		if(numHidden > 0)
+		if(_numHidden > 0)
 		{
-			layers.Add(new Layer(numNPerHidden, numInputs));
+			layers.Add(new Layer(_numNPerHidden, _numInputs));
 
-			for(int i = 0; i < numHidden-1; i++)
+			for(int i = 0; i < _numHidden-1; i++)
 			{
-				layers.Add(new Layer(numNPerHidden, numNPerHidden));
+				layers.Add(new Layer(_numNPerHidden, _numNPerHidden));
 			}
 
-			layers.Add(new Layer(numOutputs, numNPerHidden));
+			layers.Add(new Layer(_numOutputs, _numNPerHidden));
 		}
 		else
 		{
-			layers.Add(new Layer(numOutputs, numInputs));
+			layers.Add(new Layer(_numOutputs, _numInputs));
 		}
 	}
 
@@ -50,14 +52,14 @@ public class ANN{
 		List<double> outputValues = new List<double>();
 		int currentInput = 0;
 
-		if(inputValues.Count != numInputs)
+		if(inputValues.Count != _numInputs)
 		{
-			Debug.Log("ERROR: Number of Inputs must be " + numInputs);
+			Debug.Log("ERROR: Number of Inputs must be " + _numInputs);
 			return outputValues;
 		}
 
 		inputs = new List<double>(inputValues);
-		for(int i = 0; i < numHidden + 1; i++)
+		for(int i = 0; i < _numHidden + 1; i++)
 		{
 				if(i > 0)
 				{
@@ -68,23 +70,23 @@ public class ANN{
 				for(int j = 0; j < layers[i].numNeurons; j++)
 				{
 					double N = 0;
-					layers[i].neurons[j].inputs.Clear();
+					layers[i].neurons[j].Inputs.Clear();
 
-					for(int k = 0; k < layers[i].neurons[j].numInputs; k++)
+					for(int k = 0; k < layers[i].neurons[j].NumInputs; k++)
 					{
-					    layers[i].neurons[j].inputs.Add(inputs[currentInput]);
-						N += layers[i].neurons[j].weights[k] * inputs[currentInput];
+					    layers[i].neurons[j].Inputs.Add(inputs[currentInput]);
+						N += layers[i].neurons[j].Weights[k] * inputs[currentInput];
 						currentInput++;
 					}
 
-					N -= layers[i].neurons[j].bias;
+					N -= layers[i].neurons[j].Bias;
 
-					if(i == numHidden)
-						layers[i].neurons[j].output = ActivationFunctionO(N);
+					if(i == _numHidden)
+						layers[i].neurons[j].Output = ActivationFunctionO(N);
 					else
-						layers[i].neurons[j].output = ActivationFunction(N);
+						layers[i].neurons[j].Output = ActivationFunction(N);
 					
-					outputValues.Add(layers[i].neurons[j].output);
+					outputValues.Add(layers[i].neurons[j].Output);
 					currentInput = 0;
 				}
 		}
@@ -98,7 +100,7 @@ public class ANN{
 		{
 			foreach(Neuron n in l.neurons)
 			{
-				foreach(double w in n.weights)
+				foreach(double w in n.Weights)
 				{
 					weightStr += w + ",";
 				}
@@ -116,9 +118,9 @@ public class ANN{
 		{
 			foreach(Neuron n in l.neurons)
 			{
-				for(int i = 0; i < n.weights.Count; i++)
+				for(int i = 0; i < n.Weights.Count; i++)
 				{
-					n.weights[i] = System.Convert.ToDouble(weightValues[w]);
+					n.Weights[i] = System.Convert.ToDouble(weightValues[w]);
 					w++;
 				}
 			}
@@ -128,38 +130,38 @@ public class ANN{
 	void UpdateWeights(List<double> outputs, List<double> desiredOutput)
 	{
 		double error;
-		for(int i = numHidden; i >= 0; i--)
+		for(int i = _numHidden; i >= 0; i--)
 		{
 			for(int j = 0; j < layers[i].numNeurons; j++)
 			{
-				if(i == numHidden)
+				if(i == _numHidden)
 				{
 					error = desiredOutput[j] - outputs[j];
-					layers[i].neurons[j].errorGradient = outputs[j] * (1-outputs[j]) * error;
+					layers[i].neurons[j].ErrorGradient = outputs[j] * (1-outputs[j]) * error;
 				}
 				else
 				{
-					layers[i].neurons[j].errorGradient = layers[i].neurons[j].output * (1-layers[i].neurons[j].output);
+					layers[i].neurons[j].ErrorGradient = layers[i].neurons[j].Output * (1-layers[i].neurons[j].Output);
 					double errorGradSum = 0;
 					for(int p = 0; p < layers[i+1].numNeurons; p++)
 					{
-						errorGradSum += layers[i+1].neurons[p].errorGradient * layers[i+1].neurons[p].weights[j];
+						errorGradSum += layers[i+1].neurons[p].ErrorGradient * layers[i+1].neurons[p].Weights[j];
 					}
-					layers[i].neurons[j].errorGradient *= errorGradSum;
+					layers[i].neurons[j].ErrorGradient *= errorGradSum;
 				}	
-				for(int k = 0; k < layers[i].neurons[j].numInputs; k++)
+				for(int k = 0; k < layers[i].neurons[j].NumInputs; k++)
 				{
-					if(i == numHidden)
+					if(i == _numHidden)
 					{
 						error = desiredOutput[j] - outputs[j];
-						layers[i].neurons[j].weights[k] += alpha * layers[i].neurons[j].inputs[k] * error;
+						layers[i].neurons[j].Weights[k] += _alpha * layers[i].neurons[j].Inputs[k] * error;
 					}
 					else
 					{
-						layers[i].neurons[j].weights[k] += alpha * layers[i].neurons[j].inputs[k] * layers[i].neurons[j].errorGradient;
+						layers[i].neurons[j].Weights[k] += _alpha * layers[i].neurons[j].Inputs[k] * layers[i].neurons[j].ErrorGradient;
 					}
 				}
-				layers[i].neurons[j].bias += alpha * -1 * layers[i].neurons[j].errorGradient;
+				layers[i].neurons[j].Bias += _alpha * -1 * layers[i].neurons[j].ErrorGradient;
 			}
 
 		}

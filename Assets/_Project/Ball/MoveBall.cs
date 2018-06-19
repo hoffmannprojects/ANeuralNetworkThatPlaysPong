@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class MoveBall : MonoBehaviour
 {
-    [SerializeField]
-    private AudioSource _blip;
-    [SerializeField]
-    private AudioSource _blop;
+    [SerializeField] private AudioSource _blip;
+    [SerializeField] private AudioSource _blop;
     private Vector3 _ballStartPosition;
     private Rigidbody2D _rigidBody;
 
-    [SerializeField]
-    private float _speed;
+    [SerializeField] private float _speed;
 
 	// Use this for initialization
 	void Start ()
