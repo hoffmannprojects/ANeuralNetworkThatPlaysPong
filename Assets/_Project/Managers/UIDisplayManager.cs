@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 
-public class UIManager : MonoBehaviour 
+public class UIDisplayManager : MonoBehaviour 
 {
     [SerializeField] private TextMeshProUGUI _paddle1ScoreText;
     [SerializeField] private TextMeshProUGUI _paddle2ScoreText;

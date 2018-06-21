@@ -11,6 +11,14 @@ public class MoveBall : MonoBehaviour
 
     [SerializeField] private float _speed;
 
+    public delegate void BallHitWallEventHandler (object source, System.EventArgs args);
+    public event BallHitWallEventHandler BallHitWall;
+
+    protected virtual void OnBallHitWall ()
+    {
+        BallHitWall?.Invoke(this, System.EventArgs.Empty);
+    }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -32,6 +40,7 @@ public class MoveBall : MonoBehaviour
         if (collision.gameObject.tag == "backwall")
         {
             _blop.Play();
+            OnBallHitWall();
         }
         else
         {
