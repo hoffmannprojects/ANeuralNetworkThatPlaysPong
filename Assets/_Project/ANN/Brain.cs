@@ -9,13 +9,11 @@ public class Brain : MonoBehaviour
     private Rigidbody2D _ballRigidbody2D;
     private ANN _ann;
 
-    [SerializeField] private float _ballsSaved = 0; //TODO: Why float?
-    [SerializeField] private float _ballsMissed = 0;
+    private float _ballsSaved = 0; //TODO: Why float?
     private float _yVelocity;
     private float _paddleMinY = 8.8f;
     private float _paddleMaxY = 17.4f;
     private float _paddleMaxSpeed = 15f;
-
 
     // Use this for initialization
     private void Start()
@@ -34,16 +32,20 @@ public class Brain : MonoBehaviour
         double paddleVelocity,
         bool train)
     {
-        var inputs = new List<double>();
-        inputs.Add(ballXPosition);
-        inputs.Add(ballYPosition);
-        inputs.Add(ballXVelocity);
-        inputs.Add(ballYVelocity);
-        inputs.Add(paddleXPosition);
-        inputs.Add(paddleYPosition);
+        var inputs = new List<double>
+        {
+            ballXPosition,
+            ballYPosition,
+            ballXVelocity,
+            ballYVelocity,
+            paddleXPosition,
+            paddleYPosition
+        };
 
-        var outputs = new List<double>();
-        outputs.Add(paddleVelocity);
+        var outputs = new List<double>
+        {
+            paddleVelocity
+        };
 
         if (train)
         {
