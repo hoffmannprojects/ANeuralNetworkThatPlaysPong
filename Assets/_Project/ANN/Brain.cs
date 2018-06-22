@@ -12,7 +12,6 @@ public class Brain : MonoBehaviour
     private Rigidbody2D _ballRigidbody2D;
     private ANN _ann;
 
-    private float _ballsSaved = 0; //TODO: Why float?
     private float _yVelocity;
     private float _paddleMinY = 8.8f;
     private float _paddleMaxY = 17.4f;
@@ -79,7 +78,7 @@ public class Brain : MonoBehaviour
                 hit = Physics2D.Raycast(hit.point, reflection, 1000, layerMask);
             }
 
-            // Check again in case of new raycast has happened.
+            // Check again in case of new collider was hit when calculating reflection.
             if (hit.collider)
             {
                 var output = new List<double>();

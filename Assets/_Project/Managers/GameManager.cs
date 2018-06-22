@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     #region FIELDS
     [SerializeField] private UIDisplayManager _uIDisplayManager;
+    [SerializeField] private float _delayAfterScore = 1;
 
     private int _player1Score = 0;
     private int _player2Score = 0;
@@ -57,5 +58,15 @@ public class GameManager : MonoBehaviour
             _player1Score++;
         }
         _uIDisplayManager.UpdateScore(_player1Score, _player2Score);
+
+        StartCoroutine(WaitAndResetBall(_delayAfterScore));
     }
+
+    private IEnumerator WaitAndResetBall (float timeToWait)
+    {
+        _moveBall.gameObject.SetActive(false);
+        yield return new WaitForSecondsRealtime(timeToWait);
+        _moveBall.gameObject.SetActive(true);
+        _moveBall.ResetBall();
+    } 
 }

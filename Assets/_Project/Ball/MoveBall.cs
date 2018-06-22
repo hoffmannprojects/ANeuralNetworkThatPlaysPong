@@ -66,7 +66,7 @@ public class MoveBall : MonoBehaviour
     {
         transform.position = _ballStartPosition;
         _rigidBody.velocity = Vector3.zero;
-        Vector2 direction = new Vector2(Random.Range(100f, 300f), Random.Range(-100f, 100f)).normalized;
+        Vector2 direction = new Vector2(Random.Range(-100f, 100f), Random.Range(-100f, 100f)).normalized;
 
         _rigidBody.AddForce(direction * _speed);
     }
