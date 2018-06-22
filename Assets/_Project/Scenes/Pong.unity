@@ -500,6 +500,11 @@ Prefab:
       propertyPath: m_TagString
       value: Paddle1
       objectReference: {fileID: 0}
+    - target: {fileID: 114199481921147942, guid: ac8525ca8059df741a059dc8a2da1571,
+        type: 2}
+      propertyPath: _alpha
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac8525ca8059df741a059dc8a2da1571, type: 2}
   m_IsPrefabAsset: 0
@@ -890,6 +895,16 @@ Prefab:
       propertyPath: m_Name
       value: Player1Text
       objectReference: {fileID: 0}
+    - target: {fileID: 224238015145308906, guid: eb19185ff7028b74da0c3e5e288b4216,
+        type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224238015145308906, guid: eb19185ff7028b74da0c3e5e288b4216,
+        type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb19185ff7028b74da0c3e5e288b4216, type: 2}
   m_IsPrefabAsset: 0
@@ -944,6 +959,11 @@ Prefab:
     - target: {fileID: 1507400943359366, guid: ac8525ca8059df741a059dc8a2da1571, type: 2}
       propertyPath: m_TagString
       value: Paddle2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114199481921147942, guid: ac8525ca8059df741a059dc8a2da1571,
+        type: 2}
+      propertyPath: _alpha
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac8525ca8059df741a059dc8a2da1571, type: 2}
