@@ -7,28 +7,28 @@ using UnityEngine.Assertions;
 public class GameManager : MonoBehaviour 
 {
     #region FIELDS
-    private MoveBall _moveBall;
-    #endregion
+    [SerializeField] private UIDisplayManager _uIDisplayManager;
 
-    #region PROPERTIES
-    public int Player1Score { get; private set; } = 0;
-    public int Player2Score { get; private set; } = 0;
+    private int _player1Score = 0;
+    private int _player2Score = 0;
+
+    private MoveBall _moveBall;
     #endregion
 
     #region EVENT SUBSCRIPTIONS
     private void OnEnable ()
     {
-        // Publishers.
+        /// Publishers.
         _moveBall = FindObjectOfType<MoveBall>();
         Assert.IsNotNull(_moveBall);
 
-        // Subscribe.
+        /// Subscribe to events.
         _moveBall.HitBackWall += OnBallHitBackWall;
     }
 
     private void OnDisable ()
     {
-        // Unsubscribe.
+        /// Unsubscribe from events.
         _moveBall.HitBackWall -= OnBallHitBackWall;
     }
     #endregion
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     private void Start () 
 	{
-        
+        Assert.IsNotNull(_uIDisplayManager);
 	}
 
     private void OnBallHitBackWall (object source, BallHitWallEventArgs e)
@@ -48,11 +48,14 @@ public class GameManager : MonoBehaviour
         if (wallPositionX < ballPositionX)
         {
             Debug.Log("Scoring: Left backwall hit.");
+            _player2Score++;
         }
         // Right backwall.
         else
         {
             Debug.Log("Scoring: Right backwall hit.");
+            _player1Score++;
         }
+        _uIDisplayManager.UpdateScore(_player1Score, _player2Score);
     }
 }
