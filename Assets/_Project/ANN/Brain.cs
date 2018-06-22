@@ -6,6 +6,9 @@ public class Brain : MonoBehaviour
 {
     [SerializeField] private GameObject _paddle;
     [SerializeField] private GameObject _ball;
+
+    [SerializeField] private double _alpha = 0.01;
+
     private Rigidbody2D _ballRigidbody2D;
     private ANN _ann;
 
@@ -18,7 +21,7 @@ public class Brain : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        _ann = new ANN(6, 1, 1, 4, 0.1);
+        _ann = new ANN(6, 1, 1, 4, _alpha);
         _ballRigidbody2D = _ball.GetComponent<Rigidbody2D>();
     }
 
