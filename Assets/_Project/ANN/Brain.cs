@@ -6,21 +6,21 @@ public class Brain : MonoBehaviour
 {
     [SerializeField] private GameObject _paddle;
     [SerializeField] private GameObject _ball;
+
+    [SerializeField] private double _alpha = 0.01;
+
     private Rigidbody2D _ballRigidbody2D;
     private ANN _ann;
 
-    [SerializeField] private float _ballsSaved = 0; //TODO: Why float?
-    [SerializeField] private float _ballsMissed = 0;
     private float _yVelocity;
     private float _paddleMinY = 8.8f;
     private float _paddleMaxY = 17.4f;
     private float _paddleMaxSpeed = 15f;
 
-
     // Use this for initialization
     private void Start()
     {
-        _ann = new ANN(6, 1, 1, 4, 0.1);
+        _ann = new ANN(6, 1, 1, 4, _alpha);
         _ballRigidbody2D = _ball.GetComponent<Rigidbody2D>();
     }
 
@@ -34,16 +34,20 @@ public class Brain : MonoBehaviour
         double paddleVelocity,
         bool train)
     {
-        var inputs = new List<double>();
-        inputs.Add(ballXPosition);
-        inputs.Add(ballYPosition);
-        inputs.Add(ballXVelocity);
-        inputs.Add(ballYVelocity);
-        inputs.Add(paddleXPosition);
-        inputs.Add(paddleYPosition);
+        var inputs = new List<double>
+        {
+            ballXPosition,
+            ballYPosition,
+            ballXVelocity,
+            ballYVelocity,
+            paddleXPosition,
+            paddleYPosition
+        };
 
-        var outputs = new List<double>();
-        outputs.Add(paddleVelocity);
+        var outputs = new List<double>
+        {
+            paddleVelocity
+        };
 
         if (train)
         {
@@ -74,7 +78,7 @@ public class Brain : MonoBehaviour
                 hit = Physics2D.Raycast(hit.point, reflection, 1000, layerMask);
             }
 
-            // Check again in case of new raycast has happened.
+            // Check again in case of new collider was hit when calculating reflection.
             if (hit.collider)
             {
                 var output = new List<double>();
